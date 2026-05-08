@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
+    <title>FincaVet - Iniciar Sesión</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a5276">
+    <style>
+        html, body { min-width: 1280px; overflow-x: auto; }
+        input { font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="login-app">
+        <header>
+            <h1>🐄 FincaVet</h1>
+        </header>
+        <main>
+            <div class="login-card">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Correo Electrónico</label>
+                        <input type="email" id="login-email" placeholder="Ej: veterinario@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" placeholder="Tu contraseña" required>
+                    </div>
+                    <button type="submit" id="btn-login" class="btn-primary">🔐 ENTRAR</button>
+                </form>
+                <p id="login-error" class="hidden" style="color:red;text-align:center;"></p>
+            </div>
+        </main>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="login.js?v=3.0"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW error:', err));
+      }
+    </script>
+</body>
+</html>

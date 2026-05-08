@@ -1,0 +1,374 @@
+:root {
+    --primary: #1a5276;
+    --primary-dark: #154360;
+    --secondary: #d4e6f1;
+    --danger: #c62828;
+    --gray-light: #f5f5f5;
+    --gray: #e0e0e0;
+    --text: #333;
+    --text-light: #666;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --radius: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: #eaf2f8;
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 30px;
+    min-width: 1280px;
+    overflow-x: auto;
+}
+
+/* ============ LOGIN ============ */
+#login-app {
+    max-width: 450px;
+    margin: 80px auto;
+    padding: 20px;
+}
+
+#login-app header {
+    background: var(--primary);
+    color: white;
+    padding: 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    text-align: center;
+}
+
+#login-app header h1 {
+    font-size: 1.5rem;
+}
+
+.login-card {
+    background: white;
+    padding: 30px;
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.login-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--primary);
+}
+
+.login-card .form-group {
+    margin-bottom: 15px;
+}
+
+.login-card label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============ APP Y ADMIN (compartido) ============ */
+#app, #admin-app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+#app header, #admin-app header {
+    background: var(--primary);
+    color: white;
+    padding: 15px 25px;
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+}
+
+#app header h1, #admin-app header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.btn-small {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--text);
+    border: 2px solid var(--gray);
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: var(--gray-light);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+section {
+    background: white;
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+h2 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+.filtro-card {
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.filtro-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.filtro-group {
+    flex: 1;
+    min-width: 100px;
+}
+
+.filtro-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.filtro-group input,
+.filtro-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+    transition: border-color 0.3s;
+}
+
+.filtro-group input:focus,
+.filtro-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.filtro-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: white;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tabla-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    min-width: 900px;
+}
+
+thead th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 6px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--gray);
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: var(--secondary);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--gray);
+    margin: 20px 0;
+}
+
+#resultados-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#resultados-count {
+    background: var(--secondary);
+    color: var(--primary-dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+#sin-resultados {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.status {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.status.online {
+    background: #ffffff40;
+}
+
+.status.offline {
+    background: #ff525240;
+}
+
+#busqueda-rapida {
+    padding: 10px 15px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    html, body {
+        min-width: 1280px;
+        overflow-x: auto;
+    }
+}

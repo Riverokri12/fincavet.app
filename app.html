@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
+    <title>FincaVet - Buscar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a5276">
+    <style>
+        html, body { min-width: 1280px; overflow-x: auto; }
+        input, select, textarea { font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🐄 FincaVet</h1>
+            <div>
+                <span id="user-display"></span>
+                <button id="btn-logout" class="btn-small">🚪 Salir</button>
+            </div>
+        </header>
+        <main>
+            <section id="filtros-section">
+                <h2>🔍 Buscar Registros</h2>
+                <div class="filtro-card">
+                    <div class="filtro-row">
+                        <div class="filtro-group">
+                            <label for="filtro-num-finca">Nº Finca</label>
+                            <input type="text" id="filtro-num-finca" placeholder="Ej: 001">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-nombre-finca">Nombre Finca</label>
+                            <input type="text" id="filtro-nombre-finca" placeholder="Ej: El Paraíso" list="lista-fincas">
+                            <datalist id="lista-fincas"></datalist>
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-trabajo">Trabajo</label>
+                            <input type="text" id="filtro-trabajo" placeholder="Ej: Palpación" list="lista-trabajos">
+                            <datalist id="lista-trabajos"></datalist>
+                        </div>
+                    </div>
+                    <div class="filtro-row">
+                        <div class="filtro-group">
+                            <label for="filtro-id-animal">ID Animal</label>
+                            <input type="text" id="filtro-id-animal" placeholder="Ej: 1015">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-raza">Raza</label>
+                            <input type="text" id="filtro-raza" placeholder="Ej: Br Rojo" list="lista-razas">
+                            <datalist id="lista-razas"></datalist>
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-dueno">Dueño</label>
+                            <input type="text" id="filtro-dueno" placeholder="Ej: Pachito" list="lista-duenos">
+                            <datalist id="lista-duenos"></datalist>
+                        </div>
+                    </div>
+                    <div class="filtro-row">
+                        <div class="filtro-group">
+                            <label for="filtro-observaciones">Observaciones</label>
+                            <input type="text" id="filtro-observaciones" placeholder="Ej: Preñada, Parida..." list="lista-observaciones">
+                            <datalist id="lista-observaciones"></datalist>
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-metodo">Método</label>
+                            <input type="text" id="filtro-metodo" placeholder="Ej: IATF, Manual..." list="lista-metodos">
+                            <datalist id="lista-metodos"></datalist>
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-fecha-desde">Fecha Desde</label>
+                            <input type="date" id="filtro-fecha-desde">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="filtro-fecha-hasta">Fecha Hasta</label>
+                            <input type="date" id="filtro-fecha-hasta">
+                        </div>
+                    </div>
+                    <div class="filtro-actions">
+                        <button id="btn-buscar" class="btn-primary">🔍 BUSCAR</button>
+                        <button id="btn-limpiar" class="btn-secondary">🧹 Limpiar Filtros</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="notas-section">
+                <h2>📝 Notas Rápidas</h2>
+                <div class="filtro-card">
+                    <div class="filtro-row">
+                        <div class="filtro-group">
+                            <label for="nota-finca">ID Finca</label>
+                            <input type="text" id="nota-finca" placeholder="Ej: 001">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="nota-id-animal">ID Animal *</label>
+                            <input type="text" id="nota-id-animal" placeholder="Ej: 1015">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="nota-trabajo">Trabajo *</label>
+                            <input type="text" id="nota-trabajo" placeholder="Ej: Palpación...">
+                        </div>
+                        <div class="filtro-group">
+                            <label for="nota-observacion">Observación</label>
+                            <input type="text" id="nota-observacion" placeholder="Ej: Preñada 3 meses...">
+                        </div>
+                    </div>
+                    <button id="btn-guardar-nota" class="btn-primary" style="width:auto;">💾 Guardar Nota</button>
+                    <span id="nota-mensaje" style="margin-left:10px;color:green;display:none;">✅ Guardada</span>
+                    <button id="btn-refrescar-notas" class="btn-secondary" style="width:auto; margin-left:10px;">🔄 Refrescar</button>
+                </div>
+                <hr>
+                <h3>Notas Recientes</h3>
+                <div class="tabla-container">
+                    <table>
+                        <thead><tr><th>Finca</th><th>Fecha</th><th>ID</th><th>Trabajo</th><th>Obs.</th><th>Sinc.</th><th></th></tr></thead>
+                        <tbody id="tbody-notas"><tr><td colspan="7" style="text-align:center;">Cargando notas...</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="resultados-section">
+                <div id="resultados-header">
+                    <h2>📋 Resultados</h2>
+                    <span id="resultados-count"></span>
+                </div>
+                <div class="tabla-container">
+                    <table id="tabla-resultados">
+                        <thead>
+                            <tr><th>Nº Finca</th><th>Finca</th><th>Trabajo</th><th>Fecha</th><th>ID</th><th>Raza</th><th>Obs.</th><th>Método</th><th>Dueño</th></tr>
+                        </thead>
+                        <tbody id="tbody-resultados"></tbody>
+                    </table>
+                </div>
+                <div id="sin-resultados" class="hidden"><p>No se encontraron registros.</p></div>
+            </section>
+        </main>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="app.js?v=3.0"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW error:', err));
+      }
+    </script>
+</body>
+</html>

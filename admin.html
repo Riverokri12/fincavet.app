@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
+    <title>FincaVet - Admin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a5276">
+    <style>
+        html, body { min-width: 1280px; overflow-x: auto; }
+        input, select, textarea { font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="admin-app">
+        <header>
+            <h1>🔧 FincaVet Admin</h1>
+            <div>
+                <span id="admin-display"></span>
+                <button id="btn-admin-logout" class="btn-small">🚪 Salir</button>
+            </div>
+        </header>
+        <main>
+            <section>
+                <h2>👥 Gestionar Usuarios</h2>
+                <form id="usuario-form">
+                    <input type="hidden" id="usuario-uid">
+                    <div class="form-row">
+                        <div class="form-group"><label>Correo</label><input type="email" id="usuario-email" required></div>
+                        <div class="form-group"><label>Contraseña</label><input type="password" id="usuario-password"></div>
+                        <div class="form-group"><label>Nombre</label><input type="text" id="usuario-nombre" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rol</label>
+                            <select id="usuario-rol">
+                            <option value="veterinario">Veterinario</option>
+                            <option value="dueno">Dueño de Finca</option>
+                            <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Activo</label>
+                            <select id="usuario-activo">
+                                <option value="true">Sí</option>
+                                <option value="false">No (bloqueado)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">💾 Guardar Usuario</button>
+                </form>
+                <hr>
+                <h3>Usuarios Existentes</h3>
+                <table>
+                    <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Activo</th><th>Acciones</th></tr></thead>
+                    <tbody id="tabla-usuarios"></tbody>
+                </table>
+            </section>
+            <section>
+                <h2>➕ Registrar Nuevo Animal</h2>
+                <form id="registro-form">
+                    <input type="hidden" id="doc-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Veterinario</label>
+                            <select id="registro-veterinario" required></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Nº Finca *</label><input type="text" id="num-finca" required></div>
+                        <div class="form-group"><label>Nombre Finca *</label><input type="text" id="nombre-finca" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Trabajo *</label><input type="text" id="trabajo" required></div>
+                        <div class="form-group"><label>Fecha *</label><input type="date" id="fecha" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>ID Animal *</label><input type="text" id="id-animal" required></div>
+                        <div class="form-group"><label>Raza</label><input type="text" id="raza"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Observaciones</label><input type="text" id="observaciones"></div>
+                        <div class="form-group"><label>Método</label><input type="text" id="metodo"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Dueño *</label><input type="text" id="dueno-animal" required></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">💾 Guardar Registro</button>
+                        <button type="button" id="btn-cancelar" class="btn-secondary hidden">❌ Cancelar</button>
+                    </div>
+                </form>
+            </section>
+            <section>
+                <h2>📋 Todos los Registros</h2>
+                <input type="text" id="busqueda-rapida" placeholder="🔍 Buscar...">
+                <div class="tabla-container">
+                    <table>
+                        <thead><tr><th>Vet</th><th>Nº Finca</th><th>Finca</th><th>Trabajo</th><th>Fecha</th><th>ID</th><th>Raza</th><th>Obs.</th><th>Método</th><th>Dueño</th><th>Acciones</th></tr></thead>
+                        <tbody id="tabla-admin"></tbody>
+                    </table>
+                </div>
+            </section>
+            <section>
+                <h2>📝 Notas Rápidas de Veterinarios</h2>
+                <div class="tabla-container">
+                    <table>
+                        <thead><tr><th>Vet</th><th>Fecha</th><th>ID Animal</th><th>Trabajo</th><th>Observación</th><th>Acción</th></tr></thead>
+                        <tbody id="tabla-notas-admin"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="admin.js?v=3.0"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW error:', err));
+      }
+    </script>
+</body>
+</html>
