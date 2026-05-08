@@ -1,0 +1,6 @@
+{
+  "appId": "com.tuempresa.fincavet",
+  "appName": "FincaVet",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
