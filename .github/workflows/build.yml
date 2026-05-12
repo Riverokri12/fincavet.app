@@ -28,6 +28,15 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync
         
+      - name: Enable zoom in WebView
+        run: |
+          # Modificar MainActivity.java para habilitar zoom
+          MAIN_ACTIVITY="android/app/src/main/java/com/tuempresa/fincavet/MainActivity.java"
+          if [ -f "$MAIN_ACTIVITY" ]; then
+            sed -i 's/import com.getcapacitor.BridgeActivity;/import com.getcapacitor.BridgeActivity;\nimport android.webkit.WebSettings;\nimport android.webkit.WebView;/' "$MAIN_ACTIVITY"
+            sed -i 's/super.onCreate(savedInstanceState);/super.onCreate(savedInstanceState);\n        WebView webView = getBridge().getWebView();\n        WebSettings settings = webView.getSettings();\n        settings.setBuiltInZoomControls(true);\n        settings.setDisplayZoomControls(false);\n        settings.setSupportZoom(true);/' "$MAIN_ACTIVITY"
+          fi
+        
       - name: Build APK
         run: |
           cd android
