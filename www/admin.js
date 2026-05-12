@@ -17,6 +17,38 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// ========== PERSISTENCIA DE CAMPOS DEL FORMULARIO ==========
+const CAMPOS_PERSISTENTES = [
+  'registro-veterinario', 'num-finca', 'nombre-finca', 'trabajo', 
+  'fecha', 'dueno-animal', 'metodo', 'observaciones'
+];
+
+function guardarCamposFormulario() {
+  const datos = {};
+  CAMPOS_PERSISTENTES.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) datos[id] = el.value;
+  });
+  localStorage.setItem('fincavet_admin_form', JSON.stringify(datos));
+}
+
+function cargarCamposFormulario() {
+  const guardados = localStorage.getItem('fincavet_admin_form');
+  if (!guardados) return;
+  const datos = JSON.parse(guardados);
+  CAMPOS_PERSISTENTES.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && datos[id]) el.value = datos[id];
+  });
+}
+
+function limpiarCamposFormulario() {
+  localStorage.removeItem('fincavet_admin_form');
+  document.getElementById('registro-form').reset();
+  document.getElementById('doc-id').value = '';
+  document.getElementById('btn-cancelar').classList.add('hidden');
+}
+
 auth.onAuthStateChanged(async (user) => {
     if (!user) {
         window.location.href = 'index.html';
@@ -39,8 +71,9 @@ auth.onAuthStateChanged(async (user) => {
         });
         
         await cargarUsuarios();
-        await cargarLista();
         await cargarSelectVeterinarios();
+        cargarCamposFormulario();
+        // NO cargar lista al inicio - esperar búsqueda
         await cargarNotasAdmin();
     } catch (err) {
         console.error('Error en autenticación admin:', err);
@@ -97,12 +130,9 @@ document.getElementById('usuario-form').addEventListener('submit', async (e) => 
     
     try {
         if (uid) {
-            // Actualizar usuario existente
             const updateData = { nombre, rol, activo };
             await db.collection('usuarios').doc(uid).update(updateData);
         } else {
-            // Crear nuevo usuario - NO usar createUserWithEmailAndPassword porque desloguea al admin
-            // En su lugar, usar una Cloud Function o pedir al admin que cree el usuario manualmente en Firebase Console
             alert('⚠️ Para crear usuarios nuevos, use el panel de Firebase Authentication o implemente una Cloud Function.');
             return;
         }
@@ -137,25 +167,28 @@ document.getElementById('registro-form').addEventListener('submit', async (e) =>
     
     try {
         if (docId) {
-            // Actualizar registro existente
             await db.collection('registros').doc(docId).update(data);
             alert('✅ Registro actualizado correctamente');
         } else {
-            // Crear nuevo registro
             await db.collection('registros').add(data);
             alert('✅ Registro guardado correctamente');
         }
-        document.getElementById('registro-form').reset();
+        
+        guardarCamposFormulario();
+        
+        document.getElementById('id-animal').value = '';
+        document.getElementById('raza').value = '';
         document.getElementById('doc-id').value = '';
         document.getElementById('btn-cancelar').classList.add('hidden');
-        await cargarLista();
+        
+        // NO recargar lista - mantener búsqueda actual o vacío
     } catch(err) { 
         console.error('Error guardando registro:', err);
         alert('❌ Error al guardar: ' + err.message); 
     }
 });
 
-// ========== LISTA DE REGISTROS ==========
+// ========== LISTA DE REGISTROS - BÚSQUEDA OBLIGATORIA ==========
 let todosRegistros = [];
 
 async function cargarLista() {
@@ -168,7 +201,7 @@ async function cargarLista() {
             d.fechaDate = d.fecha?.toDate ? d.fecha.toDate() : new Date(d.fecha); 
             todosRegistros.push(d); 
         });
-        renderizarLista(todosRegistros);
+        // NO renderizar - esperar búsqueda del usuario
     } catch(e) {
         console.error('Error al cargar lista:', e);
         alert('❌ Error al cargar registros: ' + e.message);
@@ -178,7 +211,7 @@ async function cargarLista() {
 function renderizarLista(lista) {
     const tbody = document.getElementById('tabla-admin');
     if (!lista.length) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No hay registros aún.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No hay registros que coincidan.</td></tr>';
         return;
     }
     tbody.innerHTML = lista.map(r => {
@@ -200,6 +233,11 @@ function renderizarLista(lista) {
             </td>
         </tr>`;
     }).join('');
+}
+
+function mostrarMensajeBusqueda() {
+    const tbody = document.getElementById('tabla-admin');
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:30px;color:#666;font-style:italic;">🔍 Escriba algo para buscar registros (ej: 002, palpación, nombre de finca...)</td></tr>';
 }
 
 async function editarRegistro(id) {
@@ -233,7 +271,13 @@ async function eliminarRegistro(id) {
     if (!confirm('¿Eliminar este registro?')) return;
     try {
         await db.collection('registros').doc(id).delete(); 
-        await cargarLista(); 
+        // NO recargar lista completa - solo refrescar búsqueda actual
+        const t = inputBusqueda.value.toLowerCase().trim();
+        if (t && t !== '...') {
+            renderizarLista(todosRegistros.filter(r => JSON.stringify(r).toLowerCase().includes(t)));
+        } else {
+            mostrarMensajeBusqueda();
+        }
     } catch (err) {
         console.error('Error eliminando registro:', err);
         alert('❌ Error al eliminar: ' + err.message);
@@ -244,26 +288,66 @@ async function cargarSelectVeterinarios() {
     try {
         const snap = await db.collection('usuarios').where('rol', 'in', ['veterinario', 'dueno']).where('activo', '==', true).get();
         const sel = document.getElementById('registro-veterinario');
+        const valorGuardado = sel.value;
         sel.innerHTML = '<option value="">Seleccione...</option>';
         snap.forEach(doc => { 
             const d = doc.data(); 
             sel.innerHTML += `<option value="${doc.id}">${d.nombre || ''} (${d.email || ''})</option>`; 
         });
+        if (valorGuardado) sel.value = valorGuardado;
     } catch (err) {
         console.error('Error cargando veterinarios:', err);
     }
 }
 
-document.getElementById('busqueda-rapida').addEventListener('input', (e) => {
-    const t = e.target.value.toLowerCase();
-    if (!t) { renderizarLista(todosRegistros); return; }
-    renderizarLista(todosRegistros.filter(r => JSON.stringify(r).toLowerCase().includes(t)));
+// ========== BÚSQUEDA CON "..." POR DEFECTO - NO MUESTRA NADA HASTA ESCRIBIR ==========
+const inputBusqueda = document.getElementById('busqueda-rapida');
+
+// Mostrar mensaje inicial (NO registros)
+mostrarMensajeBusqueda();
+
+// Inicializar con "..."
+inputBusqueda.value = '...';
+inputBusqueda.style.color = '#999';
+
+inputBusqueda.addEventListener('focus', () => {
+    if (inputBusqueda.value === '...') {
+        inputBusqueda.value = '';
+        inputBusqueda.style.color = '#333';
+    }
+});
+
+inputBusqueda.addEventListener('blur', () => {
+    if (inputBusqueda.value.trim() === '') {
+        inputBusqueda.value = '...';
+        inputBusqueda.style.color = '#999';
+        mostrarMensajeBusqueda();
+    }
+});
+
+inputBusqueda.addEventListener('input', (e) => {
+    const t = e.target.value.toLowerCase().trim();
+    // Si está vacío o solo "...", mostrar mensaje (NO registros)
+    if (t === '' || t === '...') { 
+        mostrarMensajeBusqueda(); 
+        return; 
+    }
+    // Si escribió algo, buscar y mostrar coincidencias
+    const resultados = todosRegistros.filter(r => JSON.stringify(r).toLowerCase().includes(t));
+    renderizarLista(resultados);
 });
 
 document.getElementById('btn-cancelar').addEventListener('click', () => {
     document.getElementById('registro-form').reset();
     document.getElementById('doc-id').value = '';
     document.getElementById('btn-cancelar').classList.add('hidden');
+});
+
+// ========== BOTÓN REFRESCAR ==========
+document.getElementById('btn-refrescar-form').addEventListener('click', () => {
+    if (confirm('¿Limpiar todos los campos del formulario?')) {
+        limpiarCamposFormulario();
+    }
 });
 
 // ========== NOTAS RÁPIDAS (ADMIN) ==========
@@ -279,7 +363,6 @@ async function cargarNotasAdmin() {
         if (!tbody) return;
         tbody.innerHTML = '';
         
-        // Cargar todos los veterinarios de una vez para evitar N+1 queries
         const vetIds = [...new Set(snap.docs.map(d => d.data().veterinarioId))];
         const vetMap = new Map();
         
@@ -362,4 +445,4 @@ async function eliminarNotaAdmin(id) {
         console.error('Error eliminando nota:', err);
         alert('❌ Error al eliminar nota');
     }
-} 
+}
