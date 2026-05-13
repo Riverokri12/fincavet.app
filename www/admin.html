@@ -2,20 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FincaVet - Admin</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a5276">
-    <style>
-        html, body { min-width: 1280px; overflow-x: auto; }
-        input, select, textarea { font-size: 16px; }
-    </style>
+<base target="_blank">
 </head>
 <body>
     <div id="admin-app">
         <header>
-            <h1>🔧 FincaVet Admin</h1>
+            <h1> FincaVet Admin</h1>
             <div>
                 <span id="admin-display"></span>
                 <button id="btn-admin-logout" class="btn-small"> Salir</button>
@@ -52,10 +49,12 @@
                 </form>
                 <hr>
                 <h3>Usuarios Existentes</h3>
-                <table>
-                    <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Activo</th><th>Acciones</th></tr></thead>
-                    <tbody id="tabla-usuarios"></tbody>
-                </table>
+                <div class="tabla-container">
+                    <table>
+                        <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Activo</th><th>Acciones</th></tr></thead>
+                        <tbody id="tabla-usuarios"></tbody>
+                    </table>
+                </div>
             </section>
             <section>
                 <h2>➕ Registrar Nuevo Animal</h2>
@@ -89,6 +88,7 @@
                     <div class="form-actions">
                         <button type="submit" class="btn-primary">💾 Guardar Registro</button>
                         <button type="button" id="btn-cancelar" class="btn-secondary hidden">❌ Cancelar</button>
+                        <button type="button" id="btn-refrescar-form" class="btn-secondary">🔄 Refrescar</button>
                     </div>
                 </form>
             </section>
