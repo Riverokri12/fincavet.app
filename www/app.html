@@ -2,15 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280, initial-scale=0.8, maximum-scale=2.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FincaVet - Buscar</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a5276">
-    <style>
-        html, body { min-width: 1280px; overflow-x: auto; }
-        input, select, textarea { font-size: 16px; }
-    </style>
+<base target="_blank">
 </head>
 <body>
     <div id="app">
@@ -105,9 +102,11 @@
                             <input type="text" id="nota-observacion" placeholder="Ej: Preñada 3 meses...">
                         </div>
                     </div>
-                    <button id="btn-guardar-nota" class="btn-primary" style="width:auto;">💾 Guardar Nota</button>
-                    <span id="nota-mensaje" style="margin-left:10px;color:green;display:none;">✅ Guardada</span>
-                    <button id="btn-refrescar-notas" class="btn-secondary" style="width:auto; margin-left:10px;">🔄 Refrescar</button>
+                    <div class="filtro-actions">
+                        <button id="btn-guardar-nota" class="btn-primary" style="width:auto;">💾 Guardar Nota</button>
+                        <span id="nota-mensaje" style="margin-left:10px;color:green;display:none;">✅ Guardada</span>
+                        <button id="btn-refrescar-notas" class="btn-secondary" style="width:auto; margin-left:10px;">🔄 Refrescar</button>
+                    </div>
                 </div>
                 <hr>
                 <h3>Notas Recientes</h3>
